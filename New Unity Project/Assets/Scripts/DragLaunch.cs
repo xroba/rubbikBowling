@@ -49,7 +49,8 @@ public class DragLaunch : MonoBehaviour {
 			Vector3 currentPos = ball.transform.position;
 
 			float xValueNew = currentPos.x + xNudge;
-			float clampValueX = Mathf.Clamp(xValueNew,-50,50);
+
+			float clampValueX = Mathf.Clamp(xNudge,-50,50);
 
 			ball.transform.Translate(new Vector3 (clampValueX,0,0));
 
