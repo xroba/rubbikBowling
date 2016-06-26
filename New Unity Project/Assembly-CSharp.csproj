@@ -45,6 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Pin.cs" />
+     <Compile Include="Assets\PinSetter.cs" />
      <Compile Include="Assets\START Pack\Scripts\ActionMaster2.cs" />
      <Compile Include="Assets\START Pack\Scripts\OurScoreDisplayTest1.cs" />
      <Compile Include="Assets\Scripts\Ball.cs" />
