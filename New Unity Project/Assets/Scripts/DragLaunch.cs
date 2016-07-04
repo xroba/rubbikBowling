@@ -31,11 +31,11 @@ public class DragLaunch : MonoBehaviour {
 		Vector3 Resultante = mouseEndPos - mouseStartPos;
 		float TimeToLaunch = mEndTime - mStartTime;
 
-		Debug.Log("Time = " + TimeToLaunch);
+//		Debug.Log("Time = " + TimeToLaunch);
 
 		Vector3 nVelocity = new Vector3(Resultante.x,0,Resultante.y/TimeToLaunch);
 
-		Debug.Log("Vel =" + nVelocity);
+//		Debug.Log("Vel =" + nVelocity);
 
 		//so y Axe will correspond to the Z in 3D 
 		ball.Launch(nVelocity);

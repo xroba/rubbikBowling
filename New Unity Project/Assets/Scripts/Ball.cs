@@ -5,6 +5,8 @@ public class Ball : MonoBehaviour {
 
 	Rigidbody rigidbody;
 	AudioSource audiosource;
+	Vector3 startBallPosition;
+
 	public Vector3 launchVelocity;
 	public bool isLaunch;
 
@@ -13,6 +15,7 @@ public class Ball : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody>();
 		audiosource = GetComponent<AudioSource>();
 		rigidbody.useGravity = false;
+		startBallPosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -32,15 +35,20 @@ public class Ball : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision coll){
-
-		
-
 		if(coll.gameObject.tag == "Floor"){
 			audiosource.Play();
 		}
 
 	}
 
+	public void Reset(){
+		this.transform.position = startBallPosition;
+		rigidbody.useGravity = false;
+		rigidbody.velocity = Vector3.zero;
+		rigidbody.angularVelocity = Vector3.zero;
+		rigidbody.Sleep();
+		isLaunch = false;
+	}
 
 }
 
