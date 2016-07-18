@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(Ball))]
-public class DragLaunch : MonoBehaviour {
+public class BallDragLaunch : MonoBehaviour {
 
 	Ball ball;
 	Vector3 mouseStartPos;

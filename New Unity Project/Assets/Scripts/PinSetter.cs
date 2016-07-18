@@ -11,7 +11,8 @@ public class PinSetter : MonoBehaviour {
 	Ball ball;
 	List<Pin> listUpPins;
 	float speedPinRaiseAndDown = 5f;
-	float distanceToRaise = 45f;
+	int PinHaveFold;
+	ScoreMaster scoreMAster;
 
 	public int lastStandingCount = -1;
 	public GameObject UILeftPanelCount;
@@ -24,6 +25,7 @@ public class PinSetter : MonoBehaviour {
 		
 		standingDisplay = UILeftPanelCount.GetComponent<Text>();
 		ball = FindObjectOfType<Ball>();
+		scoreMAster = FindObjectOfType<ScoreMaster>();
 	}
 	
 	// Update is called once per frame
@@ -33,23 +35,26 @@ public class PinSetter : MonoBehaviour {
 
 		if(ballEnteredBox){
 			//update left Panel Text
-			CheckStanding();
+			UpdateStandingCountAndSettle();
 		} 
 
 
 	}
 
 
-	void CheckStanding(){
+	void UpdateStandingCountAndSettle(){
 		
 		int currentStanding = CountStanding();
 
 		if(currentStanding != lastStandingCount){
 			standingDisplay.color = Color.red;
+			PinHaveFold = lastStandingCount - currentStanding;
 			lastStandingCount = currentStanding;
 			lastChangeTime = Time.time;
 			return;
 		}
+
+
 
 		float limitThresholdInSec = 3f;
 
@@ -63,6 +68,7 @@ public class PinSetter : MonoBehaviour {
 		ballEnteredBox = false;
 		lastStandingCount = -1;
 		standingDisplay.color = Color.green;
+		scoreMAster.Bowl(PinHaveFold);
 	}
 
 	private int CountStanding(){
@@ -98,17 +104,9 @@ public class PinSetter : MonoBehaviour {
 
 	public void RaisePins ()
 	{
-		
-
 		if (listUpPins.Count > 0) {
 			foreach (Pin upPin in listUpPins) {
-
-				Debug.Log ("name" + upPin.name);
-				upPin.isImmune = true;
-				Vector3 upPosition = new Vector3 (0, distanceToRaise, 0);
-				upPin.GetComponent<Rigidbody>().useGravity = false;
-				upPin.transform.Translate(upPosition);
-
+				upPin.Raise();
 			}	
 		}
 	}
@@ -117,13 +115,8 @@ public class PinSetter : MonoBehaviour {
 	{
 		if (listUpPins.Count > 0) {
 			foreach (Pin upPin in listUpPins) {
-				upPin.isImmune = false;
-				Vector3 downPosition = new Vector3(upPin.transform.position.x,0,upPin.transform.position.z);
-				upPin.transform.position = downPosition;
-				upPin.GetComponent<Rigidbody>().useGravity = true;
-
-			}
-			 
+				upPin.Lower();
+			}		 
 		}
 	}
 
@@ -131,11 +124,12 @@ public class PinSetter : MonoBehaviour {
 		//first of all delete the pins
 		GameObject goPins = GameObject.Find("Pins");
 
-		if(goPins){
-			Destroy(goPins);
+		foreach(Transform child in goPins.transform){
+			Destroy(child.gameObject);
 		}
 
-		Instantiate(defaultPins);
+		 Instantiate(defaultPins, new Vector3(0,20,1829), Quaternion.identity);
 	}
+
 
 }

@@ -7,7 +7,7 @@ public class Pin : MonoBehaviour {
 	bool currentStanding = true;
 
 	public float angleLimitThreshold = 3f;
-	public bool isImmune = false;
+	float distanceToRaise = 45f;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,9 +19,7 @@ public class Pin : MonoBehaviour {
 	}
 
 	public bool isStanding(){
-
 		if(currentStanding == true){
-
 			float tiltx = Mathf.Abs(transform.eulerAngles.x);
 			float tilty = Mathf.Abs(transform.eulerAngles.y);
 
@@ -29,15 +27,25 @@ public class Pin : MonoBehaviour {
 				currentStanding = false;
 				return false;
 			}
-
 			return true;
-		}
-			
+		}	
 		return false;
 	}
 
+	public void Raise(){
+		Vector3 upPosition = new Vector3 (0, distanceToRaise, 0);
+		GetComponent<Rigidbody>().useGravity = false;
+		transform.Translate(upPosition);
+	}
+
+	public void Lower(){
+		Vector3 downPosition = new Vector3 (0, -distanceToRaise, 0);
+		GetComponent<Rigidbody>().useGravity = true;
+		transform.Translate(downPosition);
+	}
+
 	void OnTriggerExit(Collider other){
-		if(other.GetComponent<PinSetter>() && !isImmune){
+		if(other.GetComponent<PinSetter>()){
 
 			Debug.Log("Destoy Pin on trigger Exit" + other.transform.position);
 
