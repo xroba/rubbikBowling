@@ -5,102 +5,57 @@ using UnityEngine.UI;
 
 public class PinSetter : MonoBehaviour {
 
-	Pin[] ArrPins;
-	Text standingDisplay;
-	float lastChangeTime;
-	Ball ball;
-	List<Pin> listUpPins;
-	float speedPinRaiseAndDown = 5f;
-	int PinHaveFold;
-	ScoreMaster scoreMAster;
 
-	public int lastStandingCount = -1;
-	public GameObject UILeftPanelCount;
-	public bool ballEnteredBox;
+	Animator animator;
 	public GameObject defaultPins;
+	LaneBox laneBox;
 
+
+	List<Pin> listUpPins;
 
 	// Use this for initialization
 	void Start () {
-		
-		standingDisplay = UILeftPanelCount.GetComponent<Text>();
-		ball = FindObjectOfType<Ball>();
-		scoreMAster = FindObjectOfType<ScoreMaster>();
+		animator = GetComponent<Animator>();
+		laneBox = FindObjectOfType<LaneBox>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//allways count pin standing
-		standingDisplay.text = CountStanding().ToString();
+		
+	}
 
-		if(ballEnteredBox){
-			//update left Panel Text
-			UpdateStandingCountAndSettle();
+	public void PinsHaveSettled(ActionMaster.Action mAction){
+		listUpPins = laneBox.listUpPins;
+		Debug.Log("mAction: " + mAction);
+
+		if(mAction == ActionMaster.Action.Tidy){
+			animator.SetTrigger("tidyTrigger");
+		}
+		else if(mAction == ActionMaster.Action.Reset) {
+			animator.SetTrigger("resetTrigger");
+			laneBox.lastSettledCount = 10;
+		} 
+		else if(mAction == ActionMaster.Action.EndTurn){
+			animator.SetTrigger("resetTrigger");
+			laneBox.lastSettledCount = 10;
+		}
+		else if(mAction == ActionMaster.Action.EndGame) {
+			throw new UnityException("sqoi END GAME");
 		} 
 
 
-	}
 
+//		ball.Reset();
+//		SetBallLeftBox(false);
 
-	void UpdateStandingCountAndSettle(){
-		
-		int currentStanding = CountStanding();
-
-		if(currentStanding != lastStandingCount){
-			standingDisplay.color = Color.red;
-			PinHaveFold = lastStandingCount - currentStanding;
-			lastStandingCount = currentStanding;
-			lastChangeTime = Time.time;
-			return;
-		}
-
-
-
-		float limitThresholdInSec = 3f;
-
-		if( (Time.time - lastChangeTime) > limitThresholdInSec){
-			PinsHaveSettled();
-		}
-	}
-
-	void PinsHaveSettled(){
-		ball.Reset();
-		ballEnteredBox = false;
-		lastStandingCount = -1;
-		standingDisplay.color = Color.green;
-		scoreMAster.Bowl(PinHaveFold);
-	}
-
-	private int CountStanding(){
-
-		listUpPins = new List<Pin>();
-		//retrieve allPins
-		ArrPins = retrieveAllPin();
-
-		int standing = 0;
-		foreach(Pin mpin in ArrPins){
-			if(mpin.isStanding()){
-				listUpPins.Add(mpin);
-				standing++;
-			}
-
-		}
-
-		return standing;
-	}
-
-	private Pin[] retrieveAllPin(){
-		return FindObjectsOfType<Pin>();
-	}
-
-	void OnTriggerEnter(Collider other){
-
-		if(other.GetComponent<Ball>()){
-			standingDisplay.color = Color.red;
-			ballEnteredBox = true;
-		}
+      
 
 	}
+
+
+
+
+
 
 	public void RaisePins ()
 	{
@@ -129,6 +84,7 @@ public class PinSetter : MonoBehaviour {
 		}
 
 		 Instantiate(defaultPins, new Vector3(0,20,1829), Quaternion.identity);
+
 	}
 
 

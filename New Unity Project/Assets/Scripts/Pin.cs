@@ -47,7 +47,7 @@ public class Pin : MonoBehaviour {
 	void OnTriggerExit(Collider other){
 		if(other.GetComponent<PinSetter>()){
 
-			Debug.Log("Destoy Pin on trigger Exit" + other.transform.position);
+	//		Debug.Log("Destoy Pin on trigger Exit" + other.transform.position);
 
 			Destroy(this.gameObject);
 		}
