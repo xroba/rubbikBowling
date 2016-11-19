@@ -6,7 +6,7 @@ using System.Collections.Generic;
 [TestFixture]
 public class ActionMasterTest {
 
-	ActionMaster _actionMaster;
+	//ActionMaster _actionMaster;
 	ActionMaster.Action endTurn;
 	ActionMaster.Action tidy;
 	ActionMaster.Action reset;
@@ -24,7 +24,7 @@ public class ActionMasterTest {
 	//ScoreMaster.Action endturn = ScoreMaster.Action.EndTurn;
 	[SetUp]
 	public void Setup(){
-		_actionMaster = new ActionMaster();
+	//	_actionMaster = new ActionMaster();
 	}
 
 	[Test]
@@ -51,47 +51,47 @@ public class ActionMasterTest {
 	[Test]
 	public void T01OneStrikeReturnsEndTurn(){
 		List<int> pinFalls =  new List<int>(){10};
-		Assert.AreEqual(endTurn,_actionMaster.PinFalls(pinFalls));
+		Assert.AreEqual(endTurn,ActionMaster.NextAction(pinFalls));
 	}
 
 	[Test]
 	public void T02Bow8ReturnsTidy(){
 		List<int> pinFalls =  new List<int>(){8};
-		Assert.AreEqual(tidy,_actionMaster.PinFalls(pinFalls));
+		Assert.AreEqual(tidy,ActionMaster.NextAction(pinFalls));
 	}
 
 	[Test]
 	public void T03Bowl2_8Spare_ReturnEndTurn(){
 		List<int> pinFalls =  new List<int>(){8,2};
-		Assert.AreEqual(endTurn,_actionMaster.PinFalls(pinFalls));
+		Assert.AreEqual(endTurn,ActionMaster.NextAction(pinFalls));
 	}
 
 		[Test]
 		public void T09FirstBall_ReturnIsFirstRollonTurnTrue(){
 			List<int> pinFalls =  new List<int>(){1};
-			_actionMaster.PinFalls(pinFalls);
-			Assert.AreEqual(true,_actionMaster.isFirstRollFromCurrentTurn());
+			ActionMaster.NextAction(pinFalls);
+			Assert.AreEqual(true,ActionMaster.isFirstRollFromCurrentTurn());
 		}
 
 		[Test]
 		public void T10SecondBall5_ReturnIsFirstRollonTurnShouldBeFalse(){
 			List<int> pinFalls =  new List<int>(){5,3};
-			_actionMaster.PinFalls(pinFalls);
-			Assert.AreEqual(false,_actionMaster.isFirstRollFromCurrentTurn());
+			ActionMaster.NextAction(pinFalls);
+		Assert.AreEqual(false,ActionMaster.isFirstRollFromCurrentTurn());
 		}
 
 		[Test]
 		public void T11ThirdBall5_ReturnIsFirstRollonTurnShouldBeTrue(){
 			List<int> pinFalls =  new List<int>(){5,5,5};
-			_actionMaster.PinFalls(pinFalls);
-			Assert.AreEqual(true,_actionMaster.isFirstRollFromCurrentTurn());
+			ActionMaster.NextAction(pinFalls);
+		Assert.AreEqual(true,ActionMaster.isFirstRollFromCurrentTurn());
 		}
 
 		[Test]
 		public void T12SecondBallStrike_ReturnIsFirstRollonTurnShouldBeFalse(){
 			List<int> pinFalls =  new List<int>(){0,10};
-			_actionMaster.PinFalls(pinFalls);
-			Assert.AreEqual(false,_actionMaster.isFirstRollFromCurrentTurn());
+			ActionMaster.NextAction(pinFalls);
+		Assert.AreEqual(false,ActionMaster.isFirstRollFromCurrentTurn());
 		}
 
 		[Test]
@@ -99,40 +99,40 @@ public class ActionMasterTest {
 			
 			List<int> pinFalls =  new List<int>(){1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1,10};
 
-		Assert.AreEqual(reset,_actionMaster.PinFalls(pinFalls));
+		Assert.AreEqual(reset,ActionMaster.NextAction(pinFalls));
 
 		}
 
 		[Test]
 		public void T14Checkball21ReturnEndGame(){
 			List<int> pinFalls =  new List<int>(){8,2, 7,3, 3,4, 10, 2,8, 10, 10, 8,0, 10, 8,2,9};
-			Assert.AreEqual(endGame,_actionMaster.PinFalls(pinFalls));
+			Assert.AreEqual(endGame,ActionMaster.NextAction(pinFalls));
 		}
 
 		[Test]
 		public void T15Checkball20ReturnEndGameifnoReward21(){
 			List<int> pinFalls =  new List<int>(){8,2, 7,3, 3,4, 10, 2,8, 10, 10, 8,0, 10, 8,1};
-			Assert.AreEqual(endGame,_actionMaster.PinFalls(pinFalls));
+			Assert.AreEqual(endGame,ActionMaster.NextAction(pinFalls));
 		}
 
 		[Test]
 		public void T16Checkball19AtStrikeAndNotHitAllTheBallOn20ReturnTidy(){
 			List<int> pinFalls =  new List<int>(){8,2, 7,3, 3,4, 1,1, 2,8, 1,1, 1,1, 1,1, 1,1, 10,5};
-			Assert.AreEqual(tidy,_actionMaster.PinFalls(pinFalls));
+			Assert.AreEqual(tidy,ActionMaster.NextAction(pinFalls));
 		}
 
 
 		[Test]
 		public void T18TwoStrikelastFrameReturnReset(){
 			List<int> pinFalls =  new List<int>(){8,2, 7,3, 3,4, 1,1, 2,8, 1,1, 1,1, 1,1, 1,1, 10,10};
-			Assert.AreEqual(reset,_actionMaster.PinFalls(pinFalls));
+			Assert.AreEqual(reset,ActionMaster.NextAction(pinFalls));
 		}
 
 
 		[Test]
 		public void T19Last3ballsAreStrike(){
 			List<int> pinFalls =  new List<int>(){1,1, 1,1, 1,1, 1,1, 2,8, 1,1, 1,1, 1,1, 1,1,10,10,10};
-			Assert.AreEqual(endGame,_actionMaster.PinFalls(pinFalls));
+			Assert.AreEqual(endGame,ActionMaster.NextAction(pinFalls));
 		}
 
 }

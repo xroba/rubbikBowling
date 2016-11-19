@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
-	List<int> pinsList;
+	List<int> bowls;
 	List<int> scoreList;
-	ActionMaster _actionMaster = new ActionMaster();
 	PinSetter pinSetter;
 	Ball ball;
 
 
+
+
 	// Use this for initialization
 	void Start () {
-	 	pinsList = new List<int>();
+	 	bowls = new List<int>();
 		pinSetter = FindObjectOfType<PinSetter>();
 		ball = FindObjectOfType<Ball>();
+
 	}
 	
 	// Update is called once per frame
@@ -23,21 +26,19 @@ public class GameManager : MonoBehaviour {
 	
 	}
 
-	public void PinFall(int pinFall){
+	public void Bowl(int pinFall){
 		if(pinFall < 0 || pinFall > 10){
 			throw new UnityException("Invalid Pins Value");
 		}
-			pinsList.Add(pinFall);
-			ActionMaster.Action mAction = RetrieveActionFromActionMasterByList(pinsList);
+			bowls.Add(pinFall);
+			//ActionMaster.Action mAction = RetrieveActionFromActionMasterByList(pinsList);
+			ActionMaster.Action mAction = ActionMaster.NextAction(bowls);
 
 			//send this Action to the the PinSetter/animator
-			pinSetter.PinsHaveSettled(mAction);
+			pinSetter.PerformAction(mAction);
 
 			//Ball Reset
 			ball.Reset();
 	}
 
-	public ActionMaster.Action RetrieveActionFromActionMasterByList(List<int> pinsList){
-		return _actionMaster.PinFalls(pinsList); 	
-	}
 }

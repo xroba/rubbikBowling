@@ -3,72 +3,45 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+public class PinCounter : MonoBehaviour {
 
-public class LaneBox : MonoBehaviour {
+	public Text standingDisplay;
 
-	Ball ball;
-	Pin[] ArrPins;
-
-	Text standingDisplay;
-	float lastChangeTime;
-	float speedPinRaiseAndDown = 5f;
-	int pinFall;
-	int lastStandingCount = -1;
-	bool ballLeftBox;
-	GameManager gameManager;
-
-
-	public GameObject UILeftPanelCount;
-	public int lastSettledCount = 10;
-	public List<Pin> listUpPins;
+	private GameManager gameManager;
+	private bool ballOutOfPlay = false;
+	private int lastStandingCount = -1;
+	private int lastSettledCount = 10;
+	private float lastChangeTime;
+	private Pin[] ArrPins;
 
 	// Use this for initialization
 	void Start () {
-		ball = FindObjectOfType<Ball>();
-		standingDisplay = UILeftPanelCount.GetComponent<Text>();
 		gameManager = FindObjectOfType<GameManager>();
-
 	}
-
-	void Update(){
-
-		//allways count pin standing
+	
+	// Update is called once per frame
+	void Update () {
 		standingDisplay.text = CountStanding().ToString();
 
-		if(ballLeftBox){
+		if(ballOutOfPlay){
 			//update left Panel Text
-			standingDisplay.color = Color.red;
+
 			UpdateStandingCountAndSettle();
+			standingDisplay.color = Color.red;
 		} 
-	}
 
-	public void SetBallLeftBox(bool value){
-		ballLeftBox = value;
-	}
-
-
-
-	public void OnTriggerExit(Collider other){
-		if(other.GetComponent<Ball>()){
-			this.SetBallLeftBox(true);
-		}
 	}
 
 	private int CountStanding(){
-
-		listUpPins = new List<Pin>();
 		//retrieve allPins
 		ArrPins = retrieveAllPin();
-
 		int standing = 0;
 		foreach(Pin mpin in ArrPins){
-			if(mpin.isStanding()){
-				listUpPins.Add(mpin);
+			if(mpin.IsStanding()){
 				standing++;
 			}
-
 		}
-
+		Debug.Log("STANDING " + standing);
 		return standing;
 	}
 
@@ -76,7 +49,8 @@ public class LaneBox : MonoBehaviour {
 		return FindObjectsOfType<Pin>();
 	}
 
-	void UpdateStandingCountAndSettle(){
+
+	public void UpdateStandingCountAndSettle(){
 		
 		int currentStanding = CountStanding();
 
@@ -90,21 +64,35 @@ public class LaneBox : MonoBehaviour {
 		float limitThresholdInSec = 3f;
 
 		if( (Time.time - lastChangeTime) > limitThresholdInSec){
-			SendFallingPinsToGameManager();
+			PinHaveSettled();
 		}
 	}
 
 
-	void SendFallingPinsToGameManager(){
+		void PinHaveSettled(){
 			int standing = CountStanding();
-			pinFall = lastSettledCount - standing;
+			int pinFall = lastSettledCount - standing;
 			lastSettledCount = standing;
 
-			gameManager.PinFall(pinFall);
+			gameManager.Bowl(pinFall);
 
 			lastStandingCount = -1;
 			SetBallLeftBox(false);
 			standingDisplay.color = Color.green;
 	}
 
+	public void SetBallLeftBox(bool value){
+		ballOutOfPlay = value;
+	}
+
+	public void Reset(){
+		lastSettledCount = 10;
+	}
+
+
+	public void OnTriggerExit(Collider other){
+		if(other.GetComponent<Ball>()){
+			this.SetBallLeftBox(true);
+		}
+	}
 }

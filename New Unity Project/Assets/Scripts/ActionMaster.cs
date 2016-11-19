@@ -7,37 +7,38 @@ public class ActionMaster {
 	public enum Action {Tidy, Reset, EndTurn, EndGame};
 	// Use this for initialization
 
-	private int bowl;
-	private int[] bowls;
+	private int bowl =1 ;
+	private int[] bowls = new int[21];
 
-	private Action actionToReturn;
+	//private Action actionToReturn;
 	private int currentTurn;
-	private int currentFrame;
+	public static int currentFrame;
 
+	static public Action NextAction(List<int> pinFallList){
 
+		ActionMaster am = new ActionMaster();
+		Action currentAction = new Action();
 
-	public Action PinFalls( List<int> pinFallList){
-
-		bowl = 1;
-		bowls = new int[21];
-		currentTurn = 1;
-		currentFrame = 1;
-
+		Debug.Log("PINFALLLIST = " + pinFallList);
 
 		foreach(int pinFall in pinFallList){
-			actionToReturn = Bowl(pinFall);
+			Debug.Log("PINFALL = " + pinFall);
+
+			currentAction = am.Bowl(pinFall);
 		}
-		 return actionToReturn;
+		
+		return currentAction;
 	}
 
-	public Action Bowl(int pins){
+
+	private Action Bowl(int pins){
 
 		if(pins < 0 || pins > 10){
 			throw new UnityException("Invalid Pins Value");
 		}
 	
 		bowls[bowl - 1] = pins;
-		Debug.Log("bowl" + bowl);
+		//Debug.Log("bowl" + bowl);
 
 
 		if(bowl == 21 || (bowl == 20 && !bowl21Awarded()) ){
@@ -90,12 +91,12 @@ public class ActionMaster {
 		return total >= 10;
 	}
 
-	public int GetCurrentFrame (){
+	static public int GetCurrentFrame (){
 		return currentFrame;
 	}
 
 
-	public bool isFirstRollFromCurrentTurn(){
+	static public bool isFirstRollFromCurrentTurn(){
 		
 		return GetCurrentFrame() % 2 != 0;
 	}

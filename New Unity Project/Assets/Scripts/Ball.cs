@@ -38,7 +38,6 @@ public class Ball : MonoBehaviour {
 		if(coll.gameObject.tag == "Floor"){
 			audiosource.Play();
 		}
-
 	}
 
 	public void Reset(){
@@ -47,6 +46,7 @@ public class Ball : MonoBehaviour {
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = Vector3.zero;
 		rigidbody.Sleep();
+		transform.rotation = Quaternion.identity;
 		isLaunch = false;
 	}
 
