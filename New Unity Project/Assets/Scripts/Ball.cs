@@ -17,7 +17,8 @@ public class Ball : MonoBehaviour {
 		rigidbody.useGravity = false;
 		startBallPosition = transform.position;
 	}
-	
+
+	Debug.Log("dd");
 	// Update is called once per frame
 	void Update () {
 
