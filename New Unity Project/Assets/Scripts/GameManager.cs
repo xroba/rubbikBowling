@@ -9,8 +9,7 @@ public class GameManager : MonoBehaviour {
 	List<int> scoreList;
 	PinSetter pinSetter;
 	Ball ball;
-
-
+    ScoreDisplay scoreDislay;
 
 
 	// Use this for initialization
@@ -18,7 +17,7 @@ public class GameManager : MonoBehaviour {
 	 	bowls = new List<int>();
 		pinSetter = FindObjectOfType<PinSetter>();
 		ball = FindObjectOfType<Ball>();
-
+        scoreDislay = FindObjectOfType<ScoreDisplay>();
 	}
 	
 	// Update is called once per frame
@@ -30,15 +29,34 @@ public class GameManager : MonoBehaviour {
 		if(pinFall < 0 || pinFall > 10){
 			throw new UnityException("Invalid Pins Value");
 		}
-			bowls.Add(pinFall);
-			//ActionMaster.Action mAction = RetrieveActionFromActionMasterByList(pinsList);
-			ActionMaster.Action mAction = ActionMaster.NextAction(bowls);
+        try
+        {
+            //Ball Reset
+            ball.Reset();
+            bowls.Add(pinFall);
+            //send this Action to the the PinSetter/animator
+            pinSetter.PerformAction(ActionMaster.NextAction(bowls));
+        } catch
+        {
+            Debug.Log("ERROR ON TRY ");
+        }
+           
 
-			//send this Action to the the PinSetter/animator
-			pinSetter.PerformAction(mAction);
+            List<int> scoreFrame = ScoreMaster.ScoreFrames(bowls);
+            List<int> scoreCumulative = ScoreMaster.ScoreCumulative(bowls);
 
-			//Ball Reset
-			ball.Reset();
+        try
+        {
+            //updateScore
+            scoreDislay.FillRolls(bowls);
+            scoreDislay.FillFrames(scoreCumulative);
+        } catch
+        {
+            Debug.Log("erreur");
+        }
+        
+
+
 	}
 
 }

@@ -18,7 +18,7 @@ public class Ball : MonoBehaviour {
 		startBallPosition = transform.position;
 	}
 
-	Debug.Log("dd");
+	
 	// Update is called once per frame
 	void Update () {
 

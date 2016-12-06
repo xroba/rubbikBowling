@@ -6,11 +6,10 @@ using System.Linq;
 [TestFixture]
 	public class ScoreMasterTest
 	{
-		ScoreMaster _scoreMaster;
-
+		
 		[SetUp]
 		public void Setup(){
-			_scoreMaster = new ScoreMaster();
+			
 		}
 
 		[Test]
@@ -256,4 +255,6 @@ using System.Linq;
         int[] frames = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 33 };
         Assert.AreEqual(frames.ToList<int>(), ScoreMaster.ScoreCumulative(pinFallList));
     }
+
+  
 }

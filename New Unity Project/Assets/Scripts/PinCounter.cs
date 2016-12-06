@@ -41,7 +41,7 @@ public class PinCounter : MonoBehaviour {
 				standing++;
 			}
 		}
-		Debug.Log("STANDING " + standing);
+//		Debug.Log("STANDING " + standing);
 		return standing;
 	}
 

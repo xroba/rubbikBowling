@@ -2,15 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ScoreMaster {
-
-    static public List<int> scoreFrameList = new List<int>();
-    public int ballNumber = 1;
-    int tmpScore = 0;
-    int TotalScore = 0;
-
-    int ballNotArray0 = 0;
-
+public static class ScoreMaster {
 
     static public List<int> ScoreCumulative(List<int> rolls)
     {
